@@ -24,7 +24,14 @@ app.get('/', (req, res) => {
 var UserSchema = new Schema({
   username: String
 })
+var ExerciseSchema = new Schema({
+  userId: String,
+  description: String,
+  duration: Number,
+  date: Date
+})
 var User = mongoose.model('user', UserSchema)
+var Exercise = mongoose.model('exercise', ExerciseSchema)
 
 app.post("/api/exercise/new-user", function(req, res){
   var username = req.body.username
@@ -54,8 +61,13 @@ app.get("/api/exercise/users", function(req, res){
 })
 
 app.post("/api/exercise/add", function(req, res){
-  var id = req.body.userId;
-  
+  var {userId, description, duration, date} = req.body
+  Exercise.find({ userId: userId }).then(function(user){
+    if(user.length < 1){
+      return res.send("No exercises found")
+    }
+    return res.send(user)
+  })
 })
 
 // Not found middleware
