@@ -6,7 +6,10 @@ const bodyParser = require('body-parser')
 
 const cors = require('cors')
 
-mongoose.connect(process.env.MLAB_URI || 'mongodb://localhost/exercise-track', { useNewUrlParser: true, useFindAndModify: false, useCreateIndex: true, useUnifiedTopology: true }).catch(e => console.log("mongoose connect error"))
+var Schema = mongoose.Schema
+
+console.
+mongoose.connect(process.env.MLAB_URI, { useNewUrlParser: true, useFindAndModify: false, useCreateIndex: true, useUnifiedTopology: true }).catch(e => console.log("mongoose connect error"))
 
 app.use(cors())
 
@@ -18,11 +21,19 @@ app.get('/', (req, res) => {
   res.sendFile(__dirname + '/views/index.html')
 });
 
-var UserSchema = mongoose.Schema;
+//Mongoose  Schema and Model
+var UserSchema = new Schema({
+  username: String
+})
+var User = mongoose.model('user', UserSchema)
 
 app.post("/api/exercise/new-user", function(req, res){
   var username = req.body.username
-  res.send(username)
+  User.find({ username: username }).limit(1).then(function(){
+    
+  }).catch(function(e){
+    res.send("Username already taken")
+  })
 })
 
 // Not found middleware
