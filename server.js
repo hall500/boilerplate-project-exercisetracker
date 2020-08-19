@@ -44,7 +44,14 @@ app.post("/api/exercise/new-user", function(req, res){
   })
 })
 
-app.get("")
+app.get("/api/exercise/users", function(req, res){
+  User.find({}).then(function(users){
+    if(users.length < 1){
+      return res.send("No users found")
+    }
+    return res.send(users)
+  })
+})
 
 // Not found middleware
 app.use((req, res, next) => {
