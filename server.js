@@ -42,7 +42,7 @@ app.post("/api/exercise/new-user", function(req, res){
     var user = new User({ username: username })
     user.save(function(err, data){
       if(err) {
-        return res.status(404).send("Unable to save to db")
+        return res.status(404).send("Unable to save user to db")
       }
       return res.status(200).send({ username: data.username, _id: data.id })
     })
@@ -62,15 +62,26 @@ app.get("/api/exercise/users", function(req, res){
 
 app.post("/api/exercise/add", function(req, res){
   var {userId, description, duration, date} = req.body
-  User.find({ id: userId }).then(function(user){
-    return res.send(user)
-    var exercise = {
-      username: userId,
+  date = (date === "") ? new Date(): new Date(date)
+  User.find({ _id: userId }).then(function(user){
+    var exercise = new Exercise({
+      username: user[0].username,
       description: description,
       duration: Number(duration),
-      date: (date === "") ? new Date(): new Date(date)
-    }
-    res.send(exercise)
+      date: date.toDateString()
+    })
+    exercise.save(function(err, data){
+      if(err) return res.send("Unable to save exercise to db")
+      return res.json({
+        _id: data.id,
+        username: data.username,
+        date: data.date,
+        duration: data.duration,
+        description: data.description
+      })
+    }).catch(function(e){ 
+      console.log("Unable to save exercise") 
+    })
   })
 })
 
