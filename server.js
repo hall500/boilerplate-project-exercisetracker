@@ -85,6 +85,17 @@ app.post("/api/exercise/add", function(req, res){
   })
 })
 
+app.get("/api/exercise/log", function(req, res){
+  var userId = req.query.userId
+  if(userId == "") return res.send("unknown userId")
+  User.find({ _id: userId }).then(function(user){
+    console.log(user[0])
+    return res.end()
+  }).catch(function(e){
+    console.log("Error in finding userId")
+  })
+})
+
 // Not found middleware
 app.use((req, res, next) => {
   return next({status: 404, message: 'not found'})
