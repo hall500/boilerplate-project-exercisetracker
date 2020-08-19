@@ -87,14 +87,17 @@ app.post("/api/exercise/add", function(req, res){
 
 app.get("/api/exercise/log", function(req, res){
   var userId = req.query.userId
-  var from = req.query.from
-  var to = req.query.to
+  var from = req.query.from || ""
+  var to = req.query.to || ""
   var lim = Number(req.query.limit) || 0
   if(userId == "") return res.send("unknown userId")
   User.find({ _id: userId }).select({ __v: 0 }).then(function(user){
-    var exe = Exercise.find({ username: user[0].username }).select({ _id: 0, __v: 0, username: 0 })
+    var exe = Exercise.find({ username: user[0].username })
+    if(from != "" && to != "") Exercise.find({ username: user[0].username, date: { $gte: from, $lte: to} })
+    else if(from != "") exe = Exercise.find({ username: user[0].username, date: { $gte: from } })
+    elseif(to != "") exe = Exercise.find({ username: user[0].username, date: { $lte: to} })
     if(lim > 0) exe = exe.limit(lim)
-    exe.then(function(exercises){
+    exe.select({ _id: 0, __v: 0, username: 0 }).then(function(exercises){
       return res.json({
         _id: user[0].id,
         username: user[0].username,
