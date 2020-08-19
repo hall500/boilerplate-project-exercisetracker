@@ -8,8 +8,8 @@ const cors = require('cors')
 
 var Schema = mongoose.Schema
 
-console.
-mongoose.connect(process.env.MLAB_URI, { useNewUrlParser: true, useFindAndModify: false, useCreateIndex: true, useUnifiedTopology: true }).catch(e => console.log("mongoose connect error"))
+console.log(process.env.DB_URL)
+//mongoose.connect(process.env.MLAB_URI, { useNewUrlParser: true, useFindAndModify: false, useCreateIndex: true, useUnifiedTopology: true }).catch(e => console.log("mongoose connect error"))
 
 app.use(cors())
 
