@@ -30,17 +30,21 @@ app.post("/api/exercise/new-user", function(req, res){
   var username = req.body.username
   User.find({ username: username }).limit(1).then(function(user){
     if(user.length > 0) {
-      res.send("Username already taken")
+      return res.status(404).send("Username already taken")
     }
     var user = new User({ username: username })
     user.save(function(err, data){
-      if(err) res.send("Unable to save to db")
-      res.send({ username: data.username, _id: data.id })
+      if(err) {
+        return res.status(404).send("Unable to save to db")
+      }
+      return res.status(200).send({ username: data.username, _id: data.id })
     })
   }).catch(function(e){
-    res.send("A mongoose error ocurred")
+    console.log("A mongoose error ocurred")
   })
 })
+
+app.get("")
 
 // Not found middleware
 app.use((req, res, next) => {
