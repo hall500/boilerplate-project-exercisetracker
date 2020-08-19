@@ -73,7 +73,7 @@ app.post("/api/exercise/add", function(req, res){
     exercise.save(function(err, data){
       if(err) return res.send("Unable to save exercise to db")
       return res.json({
-        _id: data.id,
+        _id: data._id,
         username: data.username,
         date: data.date,
         duration: data.duration,
@@ -89,16 +89,17 @@ app.get("/api/exercise/log", function(req, res){
   var userId = req.query.userId
   var from = req.query.from
   var to = req.query.to
+  var lm = req.query.limit
   if(userId == "") return res.send("unknown userId")
   User.find({ _id: userId }).select({ __v: 0 }).then(function(user){
-    Exercise.find({ username: user[0].username }).select({ _id: 0, __v: 0, username: 0 }).limit().then(function(exercises){
+    Exercise.find({ username: user[0].username }).select({ _id: 0, __v: 0, username: 0 }).then(function(exercises){
       return res.json({
         _id: user[0].id,
         username: user[0].username,
         count: exercises.length,
         logs: exercises
       })
-    })
+    }).limit(2)
   }).catch(function(e){
     console.log("Error in finding userId")
   })
