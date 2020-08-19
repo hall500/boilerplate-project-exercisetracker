@@ -53,6 +53,11 @@ app.get("/api/exercise/users", function(req, res){
   })
 })
 
+app.post("/api/exercise/add", function(req, res){
+  var id = req.body.userId;
+  
+})
+
 // Not found middleware
 app.use((req, res, next) => {
   return next({status: 404, message: 'not found'})
