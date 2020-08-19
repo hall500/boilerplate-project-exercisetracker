@@ -1,17 +1,17 @@
 const express = require('express')
+var mongo = require('mongodb')
+const mongoose = require('mongoose')
 const app = express()
 const bodyParser = require('body-parser')
 
 const cors = require('cors')
 
-const mongoose = require('mongoose')
-mongoose.connect(process.env.MLAB_URI || 'mongodb://localhost/exercise-track' )
+mongoose.connect(process.env.MLAB_URI || 'mongodb://localhost/exercise-track', { useNewUrlParser: true, useFindAndModify: false, useCreateIndex: true, useUnifiedTopology: true })
 
 app.use(cors())
 
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(bodyParser.json())
-
 
 app.use(express.static('public'))
 app.get('/', (req, res) => {
