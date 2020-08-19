@@ -25,10 +25,10 @@ var UserSchema = new Schema({
   username: String
 })
 var ExerciseSchema = new Schema({
-  userId: String,
+  username: String,
   description: String,
   duration: Number,
-  date: Date
+  date: String
 })
 var User = mongoose.model('user', UserSchema)
 var Exercise = mongoose.model('exercise', ExerciseSchema)
@@ -62,11 +62,15 @@ app.get("/api/exercise/users", function(req, res){
 
 app.post("/api/exercise/add", function(req, res){
   var {userId, description, duration, date} = req.body
-  Exercise.find({ userId: userId }).then(function(user){
-    if(user.length < 1){
-      return res.send("No exercises found")
-    }
+  User.find({ id: userId }).then(function(user){
     return res.send(user)
+    var exercise = {
+      username: userId,
+      description: description,
+      duration: Number(duration),
+      date: (date === "") ? new Date(): new Date(date)
+    }
+    res.send(exercise)
   })
 })
 
