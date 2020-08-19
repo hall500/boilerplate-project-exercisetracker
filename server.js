@@ -87,18 +87,18 @@ app.post("/api/exercise/add", function(req, res){
 
 app.get("/api/exercise/log", function(req, res){
   var userId = req.query.userId
+  var from = req.query.from
+  var to = req.query.to
   if(userId == "") return res.send("unknown userId")
   User.find({ _id: userId }).select({ __v: 0 }).then(function(user){
-    var logData = user[0]
-    Exercise.find({ username: logData.username }).select({ _id: 0, __v: 0, username: 0 }).then(function(exercises){
+    Exercise.find({ username: user[0].username }).select({ _id: 0, __v: 0, username: 0 }).limit().then(function(exercises){
       return res.json({
         _id: user[0].id,
-        
+        username: user[0].username,
+        count: exercises.length,
+        logs: exercises
       })
-    }).catch(function(e){ 
-      console.log("Unable to get log data")
     })
-    return res.end()
   }).catch(function(e){
     console.log("Error in finding userId")
   })
