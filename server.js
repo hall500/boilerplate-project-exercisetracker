@@ -8,8 +8,7 @@ const cors = require('cors')
 
 var Schema = mongoose.Schema
 
-console.log(process.env.DB_URL)
-//mongoose.connect(process.env.MLAB_URI, { useNewUrlParser: true, useFindAndModify: false, useCreateIndex: true, useUnifiedTopology: true }).catch(e => console.log("mongoose connect error"))
+mongoose.connect(process.env.DB_URL, { useNewUrlParser: true, useFindAndModify: false, useCreateIndex: true, useUnifiedTopology: true })
 
 app.use(cors())
 
@@ -29,10 +28,17 @@ var User = mongoose.model('user', UserSchema)
 
 app.post("/api/exercise/new-user", function(req, res){
   var username = req.body.username
-  User.find({ username: username }).limit(1).then(function(){
-    
+  User.find({ username: username }).limit(1).then(function(user){
+    if(user.length > 0) {
+      res.send("Username already taken")
+    }
+    var user = new User({ username: username })
+    user.save(function(err, data){
+      if(err) res.send("Unable to save to db")
+      res.send({ username: data.username, _id: data.id })
+    })
   }).catch(function(e){
-    res.send("Username already taken")
+    res.send("A mongoose error ocurred")
   })
 })
 
