@@ -89,17 +89,19 @@ app.get("/api/exercise/log", function(req, res){
   var userId = req.query.userId
   var from = req.query.from
   var to = req.query.to
-  var lm = req.query.limit
+  var lim = Number(req.query.limit) || 0
   if(userId == "") return res.send("unknown userId")
   User.find({ _id: userId }).select({ __v: 0 }).then(function(user){
-    Exercise.find({ username: user[0].username }).select({ _id: 0, __v: 0, username: 0 }).then(function(exercises){
+    var exe = Exercise.find({ username: user[0].username }).select({ _id: 0, __v: 0, username: 0 })
+    if(lim > 0) exe = exe.limit(lim)
+    exe.then(function(exercises){
       return res.json({
         _id: user[0].id,
         username: user[0].username,
         count: exercises.length,
         logs: exercises
       })
-    }).limit(2)
+    })
   }).catch(function(e){
     console.log("Error in finding userId")
   })
