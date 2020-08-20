@@ -96,7 +96,16 @@ app.get("/api/exercise/log", function(req, res){
 
     if(lim > 0) exe = exe.limit(lim)
     exe.select({ _id: 0, __v: 0, username: 0 }).then(function(exercises){
-      if(from != "") 
+      if(from != "") {
+        exercises = exercises.filter(function(a){
+          return new Date(a.date) >= new Date(from)
+        })
+      }
+      if(to != ""){
+        exercises = exercises.filter(function(a){
+          return new Date(a.date) <= new Date(to)
+        })
+      }
       return res.json({
         _id: user[0].id,
         username: user[0].username,
