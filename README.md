@@ -4,8 +4,7 @@
 
 ### User Stories
 
-[![Codacy Badge](https://api.codacy.com/project/badge/Grade/7720cba547f64d279db8a009e39acbe6)](https://app.codacy.com/manual/hall500/project-exercisetracker?utm_source=github.com&utm_medium=referral&utm_content=hall500/project-exercisetracker&utm_campaign=Badge_Grade_Dashboard)
-[![Run on Repl.it](https://repl.it/badge/github/freeCodeCamp/boilerplate-project-exercisetracker)](https://repl.it/github/freeCodeCamp/boilerplate-project-exercisetracker)
+[![Run on Glitch.com](https://hall500-project-exercisetracker.glitch.me/)](https://hall500-project-exercisetracker.glitch.me/)
 
 1. I can create a user by posting form data username to /api/exercise/new-user and returned will be an object with username and _id.
 2. I can get an array of all users by getting api/exercise/users with the same info as when creating a user.
